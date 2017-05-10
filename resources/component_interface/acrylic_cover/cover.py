@@ -1,22 +1,15 @@
-from dxfwrite import DXFEngine as dxf
-
-
+import svgwrite
 
 def cover_plate(size, corner_radius):
+    dwg = svgwrite.Drawing('cover.svg', profile='tiny', size=("150mm", "150mm"), viewBox=(0, 0, 150, 150))
+    border = (150 - size)/2
+    dwg.add(dwg.rect((border, border),
+                     (size, size),
+                     rx = corner_radius,
+                     ry = corner_radius,
+                     stroke="red",
+                     stroke_width="0.01mm",
+                     fill="none"))
+    dwg.save()
 
-    drawing = dxf.drawing('output/cover.dxf')
-
-    line = dxf.line((corner_radius, 0), (size - corner_radius, 0), color=1, thickness=0.01)
-    line["thickness"] = 0.001
-    drawing.add(line)
-
-    drawing.add(dxf.line((size, 0 + corner_radius), (size, size - corner_radius), color=1, thickness=0.01))
-
-    drawing.add(dxf.line((size - corner_radius, size), (0 + corner_radius, size), color=1, thickness=0.01))
-
-    drawing.add(dxf.line((0, size - corner_radius), (0, 0 + corner_radius), color=1, thickness=0.01))
-
-    drawing.save()
-
-
-cover_plate(10, 0.5)
+cover_plate(112, 5 * 1.6)
